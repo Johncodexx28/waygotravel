@@ -1,0 +1,91 @@
+body {
+    display: flex;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+nav {
+    flex-grow: 1; 
+}
+aside nav ul li a:hover {
+    padding-left: 10px;
+    transition: 0.3s ease;
+}
+aside {
+    width: 250px;
+    background: white;
+    color: black;
+    padding: 20px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+aside h2 {
+    margin-bottom: 20px;
+    text-align: right;
+
+}
+
+.logo-container {
+    display: flex;
+    align-items: center; 
+    gap: 10px; 
+}
+.logo {
+    width: 50px; 
+    height: 50px;
+}
+
+
+
+aside nav ul {
+    list-style: none;
+    padding: 0;
+}
+aside nav ul li {
+    margin: 10px 0;
+}
+aside nav ul li a {
+    color: black;
+    text-decoration: none;
+    display: block;
+}
+main {
+    flex: 1;
+    padding: 20px;
+    background: #f4f4f4;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+th {
+    background: #eee;
+}
+
+/*Log Out*/
+.logout-container {
+    padding: 20px;
+    text-align: center;
+}
+.logout-button {
+    width: 100%;
+    padding: 12px 20px;
+    background-color: gray; 
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.logout-button:hover {
+    background-color: darkgray; 
+}
+

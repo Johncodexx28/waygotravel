@@ -1,0 +1,136 @@
+
+.filter-sidebar {
+    border-right: 1px solid #eee;
+}
+
+.filter-heading {
+    font-weight: 500;
+    color: #555;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.filter-content {
+    padding-bottom: 15px;
+}
+
+.color-option {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+}
+
+.color-option.selected {
+    border: 2px solid #333;
+}
+
+.stock-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #17a2b8;
+    color: white;
+    padding: 2px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.sale-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #dc3545;
+    color: white;
+    padding: 2px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+}
+
+.brand-logo {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    max-width: 50px;
+    max-height: 30px;
+}
+
+.price-range-slider {
+    height: 5px;
+    background: #e9ecef;
+    border-radius: 5px;
+    position: relative;
+    margin: 15px 0 30px 0;
+}
+
+.price-range-slider .slider-track {
+    height: 5px;
+    background: #6c757d;
+    position: absolute;
+    left: 10%;
+    right: 10%;
+}
+
+.price-range-slider .slider-handle {
+    width: 18px;
+    height: 18px;
+    background: white;
+    border: 2px solid #6c757d;
+    border-radius: 50%;
+    position: absolute;
+    top: -6px;
+    margin-left: -9px;
+    cursor: pointer;
+}
+
+.price-range-slider .slider-handle:first-child {
+    left: 10%;
+}
+
+.price-range-slider .slider-handle:last-child {
+    left: 90%;
+}
+
+.product-card {
+    border: 1px solid #eee;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.product-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.product-title {
+    font-size: 0.9rem;
+    margin-top: 10px;
+    color: #555;
+}
+
+.product-price {
+    font-weight: 600;
+}
+
+.sale-price {
+    color: #dc3545;
+    margin-left: 5px;
+}
+
+.color-options {
+    margin-top: 10px;
+}
+
+.form-check {
+    margin-bottom: 10px;
+}
+
+.form-check-label {
+    font-size: 0.9rem;
+}
