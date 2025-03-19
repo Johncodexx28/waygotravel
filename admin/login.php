@@ -1,3 +1,10 @@
+<?php
+    
+    include '../views/includes/conn.php';
+    session_start();
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -42,22 +49,22 @@
 
     <div class="login-container">
         <h3 class="text-center mb-4">Admin Login</h3>
-        <form id="loginForm">
+        <form action="../admin/adminauth.php" method="POST">
             <div class="mb-3">
-                <label for="username" class="form-label">Username</label>
-                <input type="text" id="username" class="form-control" placeholder="Enter your username..." required>
+                <label for="username" class="form-label">Account name</label>
+                <input type="text" id="accname" name="accname" class="form-control" placeholder="Enter your account name..." required>
             </div>
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>
                 <div class="input-group">
-                    <input type="password" id="password" class="form-control" placeholder="Enter your password..." required>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password..." required>
                     <span class="input-group-text toggle-password">
                         <i class="bi bi-eye-slash" id="togglePassword"></i>
                     </span>
                 </div>
             </div>
             <p class="text-danger text-center" id="error-message"></p>
-            <button type="button" class="btn btn-primary btn-login" onclick="validateLogin()">Login</button>
+            <button type="submit" id="login" name="login" class="btn btn-primary btn-login">Login</button>
         </form>
     </div>
 
@@ -77,21 +84,7 @@
             }
         });
 
-        // Login Validation
-        function validateLogin() {
-            var username = document.getElementById('username').value.trim();
-            var password = document.getElementById('password').value.trim();
-            var errorMessage = document.getElementById('error-message'); 
-            
-            errorMessage.textContent = "";
-            
-            if (username === "admin" && password === "admin123") {
-                alert("Login successful!");
-                window.location.href = "dashboard.html";
-            } else {
-                errorMessage.textContent = "Invalid username or password!";
-            }
-        }
+        
     </script>
 
 </body>
