@@ -10,6 +10,18 @@
         exit(); 
     }
 
+
+    $getcategories = mysqli_query($conn, "SELECT * FROM categories");
+
+    if (mysqli_num_rows($getcategories) > 0) {
+        while ($row = mysqli_fetch_object($getcategories)) {
+            $category_id = $row->category_id;
+            $category_name = $row->category_name;
+        }
+    } else {
+        die("Error: Admin not found.");
+    }
+
     
 
 ?>
@@ -43,27 +55,14 @@
 
                 <!-- Categories Grid View -->
                 <div class="row">
-                    <?php
-                    // This would be replaced with actual database query
-                    $categories = [
-                        ['id' => 1, 'name' => 'Electronics', 'products' => 24, 'icon' => 'bi-laptop'],
-                        ['id' => 2, 'name' => 'Clothing', 'products' => 38, 'icon' => 'bi-basket'],
-                        ['id' => 3, 'name' => 'Home & Garden', 'products' => 15, 'icon' => 'bi-house'],
-                        ['id' => 4, 'name' => 'Sports', 'products' => 12, 'icon' => 'bi-bicycle'],
-                        ['id' => 5, 'name' => 'Books', 'products' => 9, 'icon' => 'bi-book'],
-                        ['id' => 6, 'name' => 'Toys', 'products' => 7, 'icon' => 'bi-puzzle']
-                    ];
-
-                    foreach ($categories as $category) {
-                        echo '
+                    <?php foreach ($getcategories as $category): ?>
                         <div class="col-md-4 col-sm-6 mb-4">
                             <div class="card category-card h-100">
                                 <div class="card-body text-center">
                                     <div class="mb-3">
-                                        <i class="bi ' . $category['icon'] . ' fs-1 text-primary"></i>
+                                        <i class="bi bi-tag fs-1 text-primary"></i>
                                     </div>
-                                    <h5 class="card-title">' . $category['name'] . '</h5>
-                                    <p class="card-text">' . $category['products'] . ' Products</p>
+                                    <h5 class="card-title"><?php echo htmlspecialchars($category['category_name']); ?></h5>
                                 </div>
                                 <div class="card-footer bg-transparent border-top-0">
                                     <div class="d-flex justify-content-around">
@@ -76,9 +75,8 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>';
-                    }
-                    ?>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
 
                 <!-- Categories Table View -->
@@ -108,13 +106,13 @@
                         <tbody>
                             <?php
                             // This would be replaced with actual database query
-                            foreach ($categories as $index => $category) {
+                            foreach ($getcategories as $index => $category) {
                                 echo '
                                 <tr>
                                     <th scope="row">' . ($index + 1) . '</th>
                                     <td>
                                         <i class="bi ' . $category['icon'] . ' text-primary me-2"></i>
-                                        ' . $category['name'] . '
+                                        ' . $category['category_name'] . '
                                     </td>
                                     <td>' . $category['products'] . '</td>
                                     <td>Mar 10, 2025</td>
@@ -163,6 +161,17 @@
                                 <option value="bi-cup-hot">Food & Beverages</option>
                             </select>
                         </div>
+                        <div class="mb-3">
+                        <label for="category_icon" class="form-label">Select Icon</label>
+                            <select class="form-select" id="category_icon" name="category_icon" onchange="updateIconPreview()">
+                                <option value="bi-tag">Tag</option>
+                                <option value="bi-cart">Cart</option>
+                                <option value="bi-basket">Basket</option>
+                                <option value="bi-box">Box</option>
+                                <option value="bi-bag">Bag</option>
+                                <option value="bi-shop">Shop</option>
+                            </select>
+                         </div>
                         <div class="mb-3">
                             <label for="categoryDescription" class="form-label">Description</label>
                             <textarea class="form-control" id="categoryDescription" rows="3"></textarea>

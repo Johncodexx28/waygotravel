@@ -47,12 +47,34 @@
                                 <th scope="col">Email</th>
                                 <th scope="col">Phone Number</th>
                                 <th scope="col">Address</th>
+                                <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colspan="6" class="text-center py-4">No data available</td>
-                            </tr>
+                        <?php
+
+                            $get_data  = mysqli_query($conn, "SELECT * FROM users");
+                            
+
+                            while($row = mysqli_fetch_array($get_data)){
+                                ?>
+                             <!--
+                                <tr>
+                                    <td colspan="6" class="text-center py-4">No data available</td>
+                                </tr> -->
+                                    
+                                <tr>
+                                    <td > <?php echo $row['full_name'];?></td>
+                                    <td><?php echo $row['email'];?></td>
+                                    <td><?php echo $row['phone_number'];?></td>
+                                    <td><?php echo $row['address'];?></td>
+                                    <td><button class="btn btn-danger " href="delete.php?id=<?php echo $row['user_id']; ?>" >Delete</button></td>
+
+                                </tr>
+                            
+                                 <?php
+                            }
+                                ?>
                         </tbody>
                     </table>
                 </div>

@@ -2,14 +2,6 @@
     include '../views/includes/conn.php';
     session_start();
 
-    // Check if the connection is successful
-    if ($conn->connect_error) {
-        // Connection failed
-        die("Connection failed: " . $conn->connect_error);
-    } else {
-        // Connection successful
-        echo "Connected successfully to the database!";
-    }
 
     // Process login
     if (isset($_POST['login'])) {
@@ -38,6 +30,7 @@
                 ?>
                 <script>
                     alert("Incorrect password! ");
+                    window.location.href = '../admin/login.php';
                 </script>
                 <?php
             }
@@ -45,6 +38,7 @@
             ?>
             <script>
                 alert("Account name not found! ");
+                window.location.href = '../admin/login.php';
             </script>
             <?php
         }

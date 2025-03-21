@@ -58,23 +58,6 @@ session_start();
           <li><a href="views/apparel.php">Apparel</a></li>
           <li><a href="views/travel.php">Travel</a></li>
           <li><a href="views/about.php">About</a></li>
-          <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
-            </ul>
-          </li> -->
           <li><a href="views/contact.php">Contact</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -201,7 +184,7 @@ session_start();
           <div class="tab-pane fade active show" id="menu-starters">
 
             <div class="tab-header text-center">
-              <h5><a href="your-link-here" class="shop-link-categories">Shop now &gt;</a></h5>
+              <h5><a href="../WayGo-Travel-Website/views/bags.php" class="shop-link-categories">Shop now &gt;</a></h5>
               <h3>Bags</h3>
             </div>
 
@@ -309,7 +292,7 @@ session_start();
           <div class="tab-pane fade" id="menu-breakfast">
 
             <div class="tab-header text-center">
-              <h5><a href="your-link-here" class="shop-link-categories">Shop now &gt;</a></h5>
+              <h5><a href="../WayGo-Travel-Website/views/Accessories.php" class="shop-link-categories">Shop now &gt;</a></h5>
               <h3>Accessories</h3>
             </div>
 
@@ -417,7 +400,7 @@ session_start();
           <div class="tab-pane fade" id="menu-lunch">
 
             <div class="tab-header text-center">
-              <h5><a href="your-link-here" class="shop-link-categories">Shop now &gt;</a></h5>
+              <h5><a href="../WayGo-Travel-Website/views/apparel.php" class="shop-link-categories">Shop now &gt;</a></h5>
               <h3>Apparel</h3>
             </div>
 
@@ -525,7 +508,7 @@ session_start();
           <div class="tab-pane fade" id="menu-dinner">
 
             <div class="tab-header text-center">
-              <h5><a href="your-link-here" class="shop-link-categories">Shop now &gt;</a></h5>
+              <h5><a href="../WayGo-Travel-Website/views/travel.php" class="shop-link-categories">Shop now &gt;</a></h5>
               <h3>Travel</h3>
             </div>
 

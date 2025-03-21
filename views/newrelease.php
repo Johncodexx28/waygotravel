@@ -179,7 +179,7 @@
                   <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4">
                      <!-- Product 1 -->
                      <div class="col">
-                        <a href="../views/productdetails.php" class="text-decoration-none">
+                        <a href="../views/productdetails.php" class="text-decoration-none" >
                             <div class="product-card position-relative">
                             <div class="sale-badge">10% off</div>
                             <div class="text-center p-3">

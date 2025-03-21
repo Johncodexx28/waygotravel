@@ -3,7 +3,10 @@ $pageTitle = "Product Detail - WayGo Travel";
 session_start();
 
 // Assuming you'll get product ID from URL parameter
-$product_id = isset($_GET['id']) ? intval($_GET['id']) : 1;
+$product_id = isset($_GET['id']);
+
+
+echo $product_id;
 
 // In a real application, you would fetch product details from database
 // This is a simple mock implementation
