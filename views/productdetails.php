@@ -2,61 +2,79 @@
 $pageTitle = "Product Detail - WayGo Travel";
 session_start();
 
-// Assuming you'll get product ID from URL parameter
-$product_id = isset($_GET['id']);
+include '../cart/getcartcount.php';
+include '../views/includes/conn.php';
 
+// Get the product ID from the URL
+$product_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 
-echo $product_id;
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-// In a real application, you would fetch product details from database
-// This is a simple mock implementation
-$products = [
-    1 => [
-        'name' => 'Herschel Little America™ Backpack | Premium Classics - 30L',
-        'regular_price' => 11990.00,
-        'sale_price' => 10791.00,
-        'discount' => '10% off',
-        'colors' => [
-            ['name' => 'Black', 'code' => '#000000', 'selected' => true],
-            ['name' => 'Dark Blue', 'code' => '#1a237e', 'selected' => false],
-            ['name' => 'Light Pink', 'code' => '#f8bbd0', 'selected' => false],
-            ['name' => 'Brown', 'code' => '#8B4513', 'selected' => false]
-        ],
-        'images' => [
-            '../assets/img/bags/bag1.webp',
-            '../assets/img/bags/bag1_alt1.webp',
-            '../assets/img/bags/bag1_alt2.webp',
-            '../assets/img/bags/bag1_alt3.webp',
-        ],
-        'description' => 'Our signature backpack. Reimagined with premium EcoSystem™ Twill Fabric and vegetable tanned leather details, this iconic mountain style is built to carry everything you need for a full day.',
-        'features' => [
-            'EcoSystem™ Twill Fabric made from 100% recycled post-consumer water bottles',
-            'EcoSystem™ Liner made from 100% recycled post-consumer water bottles',
-            'Vegetable tanned genuine leather details',
-            'Padded and fleece lined floating sleeve fits a 15"/16" laptop',
-            'Easy U-pull drawcord closure',
-            'Carry comfortably with adjustable EVA-padded shoulder straps',
-            'Compatible with a sternum strap for added support',
-            'Magnet fastened straps with metal pin buckles',
-            'Side entry zipper offers easy access',
-            'Dual water bottle pockets expand to fit different sizes',
-            'Top lid pocket with key clip',
-            'Zippered front pocket',
-            'Put Yourself Out There™ internal label',
-            'Internal Herschel Supply stripe DNA tab'
-        ],
-        'specifications' => [
-            'Volume' => '30L',
-            'Dimensions' => 'H: 19.5" x W: 11.25" x D: 7"',
-            'Material' => 'EcoSystem™ Twill Fabric',
-            'Weight' => '2.4 lb / 1.09 kg'
-        ]
-    ],
-    // Add more products as needed
+// Prepare and execute a query for just this specific product
+$stmt = $conn->prepare("SELECT * FROM products WHERE product_id = ?");
+$stmt->bind_param("i", $product_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Check if product exists
+if ($result->num_rows === 0) {
+    // No product found with this ID
+    header("Location: products.php");
+    exit;
+}
+
+// Get the product data
+$product = $result->fetch_assoc();
+
+// Create dummy data for missing database fields
+// (You should update your database to include these fields properly)
+$dummyColors = [
+    ['name' => 'Black', 'code' => '#000000', 'selected' => true],
+    ['name' => 'Brown', 'code' => '#8B4513', 'selected' => false],
+    ['name' => 'Gray', 'code' => '#708090', 'selected' => false]
 ];
 
-// Get the current product
-$product = isset($products[$product_id]) ? $products[$product_id] : $products[1];
+$dummySizes = [
+    ['name' => 'Small', 'selected' => false],
+    ['name' => 'Medium', 'selected' => true],
+    ['name' => 'Large', 'selected' => false]
+];
+
+$dummyFeatures = [
+    'Durable material',
+    'Multiple compartments',
+    'Water-resistant exterior',
+    'Adjustable straps',
+    'Front pocket',
+    'Side pockets',
+    'Interior zipper pocket'
+];
+
+$dummySpecs = [
+    'Dimensions' => '16.5" × 11.8" × 5.1"',
+    'Weight' => '2.1 lbs (0.95 kg)',
+    'Materials' => 'Nylon, polyester lining',
+    'Capacity' => '24L'
+];
+
+// Extract the image path and create a dummy array of images
+$imageArray = [$product['image']];
+// Add some dummy additional images
+for ($i = 2; $i <= 4; $i++) {
+    $imageArray[] = $product['image']; // Just duplicate the main image
+}
+
+// Display success or error messages if set
+$success_message = isset($_SESSION['success']) ? $_SESSION['success'] : '';
+$error_message = isset($_SESSION['error']) ? $_SESSION['error'] : '';
+
+// Clear messages after displaying them
+if(isset($_SESSION['success'])) unset($_SESSION['success']);
+if(isset($_SESSION['error'])) unset($_SESSION['error']);
+
 ?>
 
 <!DOCTYPE html>
@@ -79,6 +97,25 @@ $product = isset($products[$product_id]) ? $products[$product_id] : $products[1]
             </nav>
         </div>
         
+        <!-- Alerts for success/error messages -->
+        <?php if (!empty($success_message)): ?>
+        <div class="container">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <?php echo $success_message; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        <?php endif; ?>
+        
+        <?php if (!empty($error_message)): ?>
+        <div class="container">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <?php echo $error_message; ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+        <?php endif; ?>
+        
         <!-- Product Detail Section -->
         <div class="container pb-4">
             <div class="row g-4">
@@ -88,9 +125,9 @@ $product = isset($products[$product_id]) ? $products[$product_id] : $products[1]
                         <div class="col-2">
                             <!-- Thumbnails -->
                             <div class="d-flex flex-column">
-                                <?php foreach($product['images'] as $index => $image): ?>
+                                <?php foreach($imageArray as $index => $image): ?>
                                 <div class="mb-2 thumbnail-container">
-                                    <img src="<?php echo $image; ?>" alt="Product thumbnail" class="img-fluid thumbnail <?php echo ($index === 0) ? 'active' : ''; ?>" 
+                                    <img src="../<?php echo $image; ?>" alt="Product thumbnail" class="img-fluid thumbnail <?php echo ($index === 0) ? 'active' : ''; ?>" 
                                          onclick="changeMainImage(this.src)">
                                 </div>
                                 <?php endforeach; ?>
@@ -99,74 +136,110 @@ $product = isset($products[$product_id]) ? $products[$product_id] : $products[1]
                         <div class="col-10">
                             <!-- Main Image -->
                             <div class="position-relative">
-                                <?php if(isset($product['discount'])): ?>
-                                <div class="sale-badge"><?php echo $product['discount']; ?></div>
-                                <?php endif; ?>
-                                <img id="mainImage" src="<?php echo $product['images'][0]; ?>" alt="<?php echo $product['name']; ?>" class="img-fluid">
+                                <div class="sale-badge">10% OFF</div>
+                                <img id="mainImage" src="../<?php echo $product['image']; ?>" alt="<?php echo $product['name']; ?>" class="img-fluid">
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Product Info -->
+                <!-- Product Info with Form -->
                 <div class="col-lg-5">
                     <h1 class="h3 mb-2"><?php echo $product['name']; ?></h1>
                     
                     <!-- Price -->
                     <div class="mb-3">
                         <div class="d-flex align-items-center">
-                            <span class="h4 mb-0 text-danger">₱<?php echo number_format($product['sale_price'], 2); ?></span>
-                            <?php if(isset($product['regular_price']) && $product['regular_price'] > $product['sale_price']): ?>
-                            <span class="ms-2 text-decoration-line-through text-muted small">₱<?php echo number_format($product['regular_price'], 2); ?></span>
-                            <?php endif; ?>
+                            <!-- Calculate sale price (10% off) -->
+                            <?php 
+                            $sale_price = $product['price'] * 0.9; // 10% off
+                            ?>
+                            <span class="h4 mb-0 text-danger">₱<?php echo number_format($sale_price, 2); ?></span>
+                            <span class="ms-2 text-decoration-line-through text-muted small">₱<?php echo number_format($product['price'], 2); ?></span>
                         </div>
                         <div class="mt-1">
-                            <small>Or 6 months for ₱1,799 with <strong>billease 0%</strong>. <a href="#">Learn More</a></small>
+                            <small>Or 6 months for ₱<?php echo number_format($sale_price/6, 2); ?> with <strong>billease 0%</strong>. <a href="#">Learn More</a></small>
                         </div>
                     </div>
                     
-                    <!-- Color and Quantity in a Row -->
-                    <div class="row mb-3">
-                        <!-- Color Selection -->
-                        <div class="col-sm-7 mb-2">
-                            <div class="mb-1 small">
-                                <span class="selected-color">Color - 
-                                    <?php 
-                                    foreach($product['colors'] as $color) {
-                                        if($color['selected']) {
-                                            echo $color['name'];
-                                            break;
+                    <!-- Form for Add to Cart -->
+                    <form id="addToCartForm" action="../cart/cartprocess.php" method="POST">
+                        <!-- Hidden Product ID -->
+                        <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
+                        <input type="hidden" name="product_name" value="<?php echo $product['name']; ?>">
+                        <input type="hidden" name="product_price" value="<?php echo $sale_price; ?>">
+                        <input type="hidden" name="product_image" value="<?php echo $product['image']; ?>">
+                        <input type="hidden" id="selected_color_input" name="color" value="Black">
+                        <input type="hidden" id="selected_size_input" name="size" value="Medium">
+                        
+                        <!-- Color and Size Section -->
+                        <div class="row mb-3">
+                            <!-- Color Selection -->
+                            <div class="col-sm-6 mb-2">
+                                <div class="mb-1 small">
+                                    <span class="selected-color">Color - 
+                                        <?php 
+                                        foreach($dummyColors as $color) {
+                                            if($color['selected']) {
+                                                echo $color['name'];
+                                                break;
+                                            }
                                         }
-                                    }
-                                    ?>
-                                </span>
-                            </div>
-                            <div class="d-flex">
-                                <?php foreach($product['colors'] as $color): ?>
-                                <div class="me-2">
-                                    <div class="color-option <?php echo $color['selected'] ? 'selected' : ''; ?>" 
-                                        style="background-color: <?php echo $color['code']; ?>; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; border: 2px solid #ddd;"
-                                        data-color="<?php echo $color['name']; ?>"></div>
+                                        ?>
+                                    </span>
                                 </div>
-                                <?php endforeach; ?>
+                                <div class="d-flex">
+                                    <?php foreach($dummyColors as $color): ?>
+                                    <div class="me-2">
+                                        <div class="color-option <?php echo $color['selected'] ? 'selected' : ''; ?>" 
+                                            style="background-color: <?php echo $color['code']; ?>; width: 25px; height: 25px; border-radius: 50%; cursor: pointer; border: 2px solid #ddd;"
+                                            data-color="<?php echo $color['name']; ?>"></div>
+                                    </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            </div>
+                            
+                            <!-- Size Selection -->
+                            <div class="col-sm-6 mb-2">
+                                <div class="mb-1 small">
+                                    <span class="selected-size">Size - 
+                                        <?php 
+                                        foreach($dummySizes as $size) {
+                                            if($size['selected']) {
+                                                echo $size['name'];
+                                                break;
+                                            }
+                                        }
+                                        ?>
+                                    </span>
+                                </div>
+                                <div class="d-flex">
+                                    <?php foreach($dummySizes as $size): ?>
+                                    <div class="me-2">
+                                        <div class="size-option <?php echo $size['selected'] ? 'selected' : ''; ?>"
+                                            style="width: auto; padding: 2px 8px; cursor: pointer; border: 1px solid #ddd; border-radius: 3px; font-size: 0.8rem;"
+                                            data-size="<?php echo $size['name']; ?>"><?php echo $size['name']; ?></div>
+                                    </div>
+                                    <?php endforeach; ?>
+                                </div>
                             </div>
                         </div>
                         
                         <!-- Quantity -->
-                        <div class="col-sm-5 mb-2">
+                        <div class="mb-3">
                             <label for="quantity" class="form-label small mb-1">Quantity</label>
-                            <div class="d-flex">
-                                <button class="btn btn-outline-secondary btn-sm py-0" onclick="decrementQuantity()">-</button>
-                                <input type="text" id="quantity" class="form-control form-control-sm text-center mx-1" value="1" min="1" style="width: 40px;">
-                                <button class="btn btn-outline-secondary btn-sm py-0" onclick="incrementQuantity()">+</button>
+                            <div class="d-flex align-items-center">
+                                <button type="button" class="btn btn-outline-secondary btn-sm py-0" onclick="decrementQuantity()">-</button>
+                                <input type="text" id="quantity" name="quantity" class="form-control form-control-sm text-center mx-1" value="1" min="1" style="width: 50px;">
+                                <button type="button" class="btn btn-outline-secondary btn-sm py-0" onclick="incrementQuantity()">+</button>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Add to Cart Button -->
-                    <div class="mb-3">
-                        <button class="btn btn-dark w-100 py-2">ADD TO CART</button>
-                    </div>
+                        
+                        <!-- Add to Cart Button -->
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-dark w-100 py-2">ADD TO CART</button>
+                        </div>
+                    </form>
                     
                     <!-- Product Description in Tabs -->
                     <div class="mb-3">
@@ -182,13 +255,13 @@ $product = isset($products[$product_id]) ? $products[$product_id] : $products[1]
                             <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                                 <p class="small"><?php echo $product['description']; ?></p>
                                 <ul class="ps-3 small">
-                                    <?php foreach(array_slice($product['features'], 0, 5) as $feature): ?>
+                                    <?php foreach(array_slice($dummyFeatures, 0, 5) as $feature): ?>
                                     <li class="mb-1"><?php echo $feature; ?></li>
                                     <?php endforeach; ?>
-                                    <?php if(count($product['features']) > 5): ?>
+                                    <?php if(count($dummyFeatures) > 5): ?>
                                     <li><a href="#" data-bs-toggle="collapse" data-bs-target="#moreFeatures">See more features</a></li>
                                     <div id="moreFeatures" class="collapse">
-                                        <?php foreach(array_slice($product['features'], 5) as $feature): ?>
+                                        <?php foreach(array_slice($dummyFeatures, 5) as $feature): ?>
                                         <li class="mb-1"><?php echo $feature; ?></li>
                                         <?php endforeach; ?>
                                     </div>
@@ -197,7 +270,7 @@ $product = isset($products[$product_id]) ? $products[$product_id] : $products[1]
                             </div>
                             <div class="tab-pane fade" id="specs" role="tabpanel" aria-labelledby="specs-tab">
                                 <dl class="row mb-0 small">
-                                    <?php foreach($product['specifications'] as $key => $value): ?>
+                                    <?php foreach($dummySpecs as $key => $value): ?>
                                     <dt class="col-sm-4"><?php echo $key; ?></dt>
                                     <dd class="col-sm-8"><?php echo $value; ?></dd>
                                     <?php endforeach; ?>
@@ -273,12 +346,76 @@ $product = isset($products[$product_id]) ? $products[$product_id] : $products[1]
                 if (colorDisplay) {
                     colorDisplay.innerText = 'Color - ' + colorName;
                 }
+                
+                // Update hidden input for color
+                document.getElementById('selected_color_input').value = colorName;
             });
         });
         
-        // Initialize selected color option with border
+        // Size option selection
+        document.querySelectorAll('.size-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.size-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                    opt.style.backgroundColor = '';
+                    opt.style.color = '';
+                    opt.style.border = '1px solid #ddd';
+                });
+                
+                this.classList.add('selected');
+                this.style.backgroundColor = '#212529';
+                this.style.color = 'white';
+                this.style.border = '1px solid #212529';
+                
+                const sizeName = this.getAttribute('data-size');
+                const sizeDisplay = document.querySelector('.selected-size');
+                if (sizeDisplay) {
+                    sizeDisplay.innerText = 'Size - ' + sizeName;
+                }
+                
+                // Update hidden input for size
+                document.getElementById('selected_size_input').value = sizeName;
+            });
+        });
+        
+        // Initialize selected color and size options with styling
         document.querySelectorAll('.color-option.selected').forEach(option => {
             option.style.border = '2px solid #000';
+        });
+        
+        document.querySelectorAll('.size-option.selected').forEach(option => {
+            option.style.backgroundColor = '#212529';
+            option.style.color = 'white';
+            option.style.border = '1px solid #212529';
+        });
+        
+        // Form submission handling with validation
+        document.getElementById('addToCartForm').addEventListener('submit', function(e) {
+            // Validate form fields before submitting
+            const quantity = document.getElementById('quantity').value;
+            const color = document.getElementById('selected_color_input').value;
+            const size = document.getElementById('selected_size_input').value;
+            
+            if (quantity < 1) {
+                e.preventDefault();
+                alert('Please select a valid quantity');
+                return false;
+            }
+            
+            if (!color) {
+                e.preventDefault();
+                alert('Please select a color');
+                return false;
+            }
+            
+            if (!size) {
+                e.preventDefault();
+                alert('Please select a size');
+                return false;
+            }
+            
+            // Form is valid, continue with submission
+            return true;
         });
     </script>
     
@@ -323,6 +460,19 @@ $product = isset($products[$product_id]) ? $products[$product_id] : $products[1]
         
         .color-option.selected {
             border: 2px solid #000;
+        }
+        
+        .size-option {
+            cursor: pointer;
+            display: inline-block;
+            text-align: center;
+            min-width: 30px;
+        }
+        
+        .size-option.selected {
+            background-color: #212529;
+            color: white;
+            border-color: #212529;
         }
         
         .form-control-sm {

@@ -1,113 +1,4 @@
-<style>
-    body {
-        background-color: #f8f9fa;
-    }
-    
-    .auth-modal .modal-content {
-        border-radius: 12px;
-        overflow: hidden;
-    }
-    
-    .auth-form {
-        padding: 1.5rem;
-    }
-    
-    .auth-image {
-        background-size: cover;
-        background-position: center;
-        min-height: 100%;
-    }
-    
-    .headline {
-        font-size: 1.8rem; /* Smaller headline */
-        font-weight: 700;
-        margin-bottom: 0.8rem;
-    }
-    
-    .headline .accent {
-        color: #4285F4;
-    }
-    
-    .form-control {
-        padding: 0.5rem 0.7rem; /* Even smaller input fields */
-        border-radius: 6px;
-        background-color: #f8f9fa;
-        border: 1px solid #e9ecef;
-        font-size: 0.85rem; /* Smaller text */
-        height: auto; /* Override Bootstrap default height */
-    }
-    
-    .btn-primary {
-        background-color: #4285F4;
-        border: none;
-        border-radius: 6px;
-        padding: 0.5rem 0.7rem;
-        font-size: 0.9rem;
-    }
-    
-    .btn-light {
-        background-color: #f8f9fa;
-        border: 1px solid #e9ecef;
-        border-radius: 6px;
-        padding: 0.5rem 0.7rem;
-    }
-    
-    .password-container {
-        position: relative;
-    }
-    
-    .password-toggle {
-        position: absolute;
-        right: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #6c757d;
-    }
-
-    .modal-close-btn {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background-color: transparent;
-        color: white;
-        width: 28px;
-        height: 28px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border: none;
-        z-index: 10;
-        opacity: 0.7;
-    }
-
-    .modal-close-btn:hover {
-        opacity: 1;
-    }
-
-    .bi-x{
-        font-size: 24px;
-    }
-    
-    /* Smaller form spacing */
-    .form-label {
-        margin-bottom: 0.25rem;
-        font-size: 0.85rem;
-    }
-    
-    .mb-3 {
-        margin-bottom: 0.75rem !important;
-    }
-    
-    /* Reduce modal size */
-    .modal-xl {
-        max-width: 900px; /* Smaller than default modal-xl */
-    }
-</style>
-</head>
-
-
-<!-- Signup Modal -->
+<!-- Signup Modal with Validation -->
 <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered auth-modal">
         <div class="modal-content">
@@ -125,52 +16,94 @@
                             <h1 class="headline">Create new account<span class="accent">.</span></h1>
                             <p class="text-muted mb-3" style="font-size: 0.85rem;">Already a member? <a href="#" class="text-decoration-none" data-bs-toggle="modal" data-bs-target="#loginModal" data-bs-dismiss="modal">Log in</a></p>
                             
-                            <form action="views/includes/process.php" method="POST">
+                            <form id="signupForm" action="views/includes/process.php" method="POST" class="needs-validation" novalidate>
                                 <div class="mb-2">
                                     <label for="fullName" class="form-label">Full name</label>
                                     <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Juan Dela Cruz" required>
+                                    <div class="invalid-feedback">
+                                        Please enter your full name.
+                                    </div>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
                                 </div>
                                 
                                 <div class="mb-2">
                                     <label for="signupEmail" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="signupEmail" name="signupEmail" placeholder="juan.delacruz@gmail.com" required>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid email address.
+                                    </div>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
                                 </div>
                                 
                                 <div class="mb-2">
                                     <label for="phoneNumber" class="form-label">Phone number</label>
                                     <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="+63 912 345 6789" required>
+                                    <div class="invalid-feedback">
+                                        Please enter a valid phone number.
+                                    </div>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
                                 </div>
                                 
                                 <div class="mb-2">
                                     <label for="address" class="form-label">Address</label>
                                     <input type="text" class="form-control" id="address" name="address" placeholder="123 Sampaguita St., Barangay Mabini" required>
+                                    <div class="invalid-feedback">
+                                        Please enter your address.
+                                    </div>
+                                    <div class="valid-feedback">
+                                        Looks good!
+                                    </div>
                                 </div>
                                 
                                 <div class="row mb-2">
                                     <div class="col-md-4 mb-2 mb-md-0">
                                         <label for="city" class="form-label">City</label>
-                                        <input type="text" class="form-control" id="city" name="city"  placeholder="Quezon City" required>
+                                        <input type="text" class="form-control" id="city" name="city" placeholder="Quezon City" required>
+                                        <div class="invalid-feedback">
+                                            Please enter your city.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
                                     </div>
                                     <div class="col-md-4 mb-2 mb-md-0">
                                         <label for="state" class="form-label">State</label>
-                                        <input type="text" class="form-control" id="state" name="state" placeholder="Metro Manila" required >
+                                        <input type="text" class="form-control" id="state" name="state" placeholder="Metro Manila" required>
+                                        <div class="invalid-feedback">
+                                            Please enter your state.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
                                     </div>
                                     <div class="col-md-4">
                                         <label for="zipCode" class="form-label">Zip code</label>
-                                        <input type="text" class="form-control" id="zipCode" name="zipCode"  placeholder="1000" required>
+                                        <input type="text" class="form-control" id="zipCode" name="zipCode" placeholder="1000" required>
+                                        <div class="invalid-feedback">
+                                            Please enter a valid zip code.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Looks good!
+                                        </div>
                                     </div>
                                 </div>
                                 
                                 <div class="mb-3">
                                     <label for="signupPassword" class="form-label">Password</label>
                                     <div class="password-container">
-                                        <input type="password" class="form-control" id="signupPassword" name="signupPassword" placeholder="••••••••" required>
-                                        <span class="password-toggle">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                                                <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                                                <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                                            </svg>
-                                        </span>
+                                        <input type="password" class="form-control" id="signupPassword" name="signupPassword" placeholder="••••••••" required minlength="6">
+                                        <div class="invalid-feedback">
+                                            Password must be at least 6 characters long.
+                                        </div>
+                                        <div class="valid-feedback">
+                                            Password looks good!
+                                        </div>
                                     </div>
                                 </div>
                                 
@@ -198,27 +131,311 @@
     </div>
 </div>
 
+<!-- Validation CSS (Can be added to your existing CSS) -->
+<style>
+    /* Validation styles */
+    .form-control.is-invalid {
+        border-color: #dc3545;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    }
+    
+    .form-control.is-valid {
+        border-color: #198754;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+        background-repeat: no-repeat;
+        background-position: right calc(0.375em + 0.1875rem) center;
+        background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+    }
+    
+    .invalid-feedback {
+        display: none;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.75rem;
+        color: #dc3545;
+    }
+    
+    .valid-feedback {
+        display: none;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 0.75rem;
+        color: #198754;
+    }
+</style>
+
 <script>
-    // Toggle password visibility
-    document.querySelectorAll('.password-toggle').forEach(toggle => {
-        toggle.addEventListener('click', function() {
-            const passwordInput = this.previousElementSibling;
-            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordInput.setAttribute('type', type);
-            
-            // Toggle icon
-            if (type === 'text') {
-                this.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-eye-slash" viewBox="0 0 16 16">
-                    <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
-                    <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
-                    <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z"/>
-                </svg>`;
-            } else {
-                this.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="currentColor" class="bi bi-eye" viewBox="0 0 16 16">
-                    <path d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z"/>
-                    <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"/>
-                </svg>`;
-            }
+    document.addEventListener('DOMContentLoaded', function() {
+    // Get the signup form element
+    const signupForm = document.getElementById('signupForm');
+    if (!signupForm) return; // Exit if form not found
+    
+    // Get all required input elements
+    const fullNameInput = document.getElementById('fullName');
+    const emailInput = document.getElementById('signupEmail');
+    const phoneInput = document.getElementById('phoneNumber');
+    const addressInput = document.getElementById('address');
+    const cityInput = document.getElementById('city');
+    const stateInput = document.getElementById('state');
+    const zipCodeInput = document.getElementById('zipCode');
+    const passwordInput = document.getElementById('signupPassword');
+    
+    // Setup validation event listeners for all fields
+    if (fullNameInput) {
+        fullNameInput.addEventListener('input', function() {
+            validateName(this);
         });
+    }
+    
+    if (emailInput) {
+        emailInput.addEventListener('input', function() {
+            validateEmail(this);
+        });
+    }
+    
+    if (phoneInput) {
+        phoneInput.addEventListener('input', function() {
+            validatePhone(this);
+        });
+    }
+    
+    if (addressInput) {
+        addressInput.addEventListener('input', function() {
+            validateRequired(this, 'Please enter your address');
+        });
+    }
+    
+    if (cityInput) {
+        cityInput.addEventListener('input', function() {
+            validateRequired(this, 'Please enter your city');
+        });
+    }
+    
+    if (stateInput) {
+        stateInput.addEventListener('input', function() {
+            validateRequired(this, 'Please enter your state');
+        });
+    }
+    
+    if (zipCodeInput) {
+        zipCodeInput.addEventListener('input', function() {
+            validateZipCode(this);
+        });
+    }
+    
+    if (passwordInput) {
+        passwordInput.addEventListener('input', function() {
+            validatePassword(this);
+        });
+    }
+    
+    // Form submission validation
+    signupForm.addEventListener('submit', function(event) {
+        let isValid = true;
+        
+        // Validate all fields
+        if (fullNameInput) {
+            if (!validateName(fullNameInput)) isValid = false;
+        }
+        
+        if (emailInput) {
+            if (!validateEmail(emailInput)) isValid = false;
+        }
+        
+        if (phoneInput) {
+            if (!validatePhone(phoneInput)) isValid = false;
+        }
+        
+        if (addressInput) {
+            if (!validateRequired(addressInput, 'Please enter your address')) isValid = false;
+        }
+        
+        if (cityInput) {
+            if (!validateRequired(cityInput, 'Please enter your city')) isValid = false;
+        }
+        
+        if (stateInput) {
+            if (!validateRequired(stateInput, 'Please enter your state')) isValid = false;
+        }
+        
+        if (zipCodeInput) {
+            if (!validateZipCode(zipCodeInput)) isValid = false;
+        }
+        
+        if (passwordInput) {
+            if (!validatePassword(passwordInput)) isValid = false;
+        }
+        
+        if (!isValid) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        
+        signupForm.classList.add('was-validated');
     });
+    
+    // Validation functions
+    function validateName(input) {
+        // Reset both feedback elements first
+        resetFeedback(input);
+        
+        if (input.value.trim() === '') {
+            setInvalid(input, 'Full name is required');
+            return false;
+        } else if (input.value.trim().length < 2) {
+            setInvalid(input, 'Name must be at least 2 characters');
+            return false;
+        } else {
+            setValid(input);
+            return true;
+        }
+    }
+    
+    function validateEmail(input) {
+        // Reset both feedback elements first
+        resetFeedback(input);
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
+        if (input.value === '') {
+            setInvalid(input, 'Email address is required');
+            return false;
+        } else if (!emailRegex.test(input.value)) {
+            setInvalid(input, 'Please enter a valid email address');
+            return false;
+        } else {
+            setValid(input);
+            return true;
+        }
+    }
+    
+    function validatePhone(input) {
+        // Reset both feedback elements first
+        resetFeedback(input);
+        
+        // Basic phone validation (can be customized for specific formats)
+        const phoneRegex = /^[+]?[\s./0-9()-]{10,}$/;
+        
+        if (input.value === '') {
+            setInvalid(input, 'Phone number is required');
+            return false;
+        } else if (!phoneRegex.test(input.value)) {
+            setInvalid(input, 'Please enter a valid phone number');
+            return false;
+        } else {
+            setValid(input);
+            return true;
+        }
+    }
+    
+    function validateZipCode(input) {
+        // Reset both feedback elements first
+        resetFeedback(input);
+        
+        // Basic ZIP code validation (can be customized for country-specific formats)
+        const zipRegex = /^\d{4,6}$/;
+        
+        if (input.value === '') {
+            setInvalid(input, 'ZIP code is required');
+            return false;
+        } else if (!zipRegex.test(input.value)) {
+            setInvalid(input, 'Please enter a valid ZIP code (4-6 digits)');
+            return false;
+        } else {
+            setValid(input);
+            return true;
+        }
+    }
+    
+    function validatePassword(input) {
+        // Reset both feedback elements first
+        resetFeedback(input);
+        
+        if (input.value === '') {
+            setInvalid(input, 'Password is required');
+            return false;
+        } else if (input.value.length < 6) {
+            setInvalid(input, 'Password must be at least 6 characters long');
+            return false;
+        } else {
+            setValid(input);
+            return true;
+        }
+    }
+    
+    function validateRequired(input, message) {
+        // Reset both feedback elements first
+        resetFeedback(input);
+        
+        if (input.value.trim() === '') {
+            setInvalid(input, message);
+            return false;
+        } else {
+            setValid(input);
+            return true;
+        }
+    }
+    
+    // Helper function to reset both feedback elements
+    function resetFeedback(input) {
+        // Remove both valid and invalid classes if input is empty
+        if (input.value.trim() === '') {
+            input.classList.remove('is-valid', 'is-invalid');
+            
+            // Hide both feedback elements
+            const invalidFeedback = input.nextElementSibling;
+            if (invalidFeedback && invalidFeedback.classList.contains('invalid-feedback')) {
+                invalidFeedback.style.display = 'none';
+            }
+            
+            const validFeedback = input.nextElementSibling.nextElementSibling;
+            if (validFeedback && validFeedback.classList.contains('valid-feedback')) {
+                validFeedback.style.display = 'none';
+            }
+        }
+    }
+    
+    // Helper functions for setting validation states
+    function setInvalid(input, message) {
+        input.classList.add('is-invalid');
+        input.classList.remove('is-valid');
+        
+        // Find and show invalid feedback element
+        const invalidFeedback = input.nextElementSibling;
+        if (invalidFeedback && invalidFeedback.classList.contains('invalid-feedback')) {
+            invalidFeedback.textContent = message;
+            invalidFeedback.style.display = 'block';
+        }
+        
+        // Hide valid feedback element
+        const validFeedback = input.nextElementSibling.nextElementSibling;
+        if (validFeedback && validFeedback.classList.contains('valid-feedback')) {
+            validFeedback.style.display = 'none';
+        }
+        
+        return false;
+    }
+    
+    function setValid(input) {
+        input.classList.remove('is-invalid');
+        input.classList.add('is-valid');
+        
+        // Hide invalid feedback element
+        const invalidFeedback = input.nextElementSibling;
+        if (invalidFeedback && invalidFeedback.classList.contains('invalid-feedback')) {
+            invalidFeedback.style.display = 'none';
+        }
+        
+        // Show valid feedback element
+        const validFeedback = input.nextElementSibling.nextElementSibling;
+        if (validFeedback && validFeedback.classList.contains('valid-feedback')) {
+            validFeedback.style.display = 'block';
+        }
+        
+        return true;
+    }
+});
 </script>

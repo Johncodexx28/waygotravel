@@ -1,5 +1,6 @@
 <?php
 $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
+
 ?>
 
 <header id="header" class="header d-flex align-items-center sticky-top">
@@ -26,6 +27,7 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
         <!-- Cart Icon Triggers Offcanvas -->
         <a class="nav-icon cart" href="#" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
           <i class="bi bi-cart"></i>
+          <span class="badge bg-primary" id="cart-badge"><?php echo json_encode($count); ?></span>
         </a>
 
         <div class="user-prof-drop">
@@ -35,7 +37,7 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
             <ul class="dropdown-menu" aria-labelledby="userDropdown">
               <?php if(isset($_SESSION['user_id'])): ?>
                 <li>
-                  <a class="dropdown-item" href="profile.php">
+                  <a class="dropdown-item" href="../views/userprofile.php">
                     <i class="bi bi-person me-2"></i> My Profile
                   </a>
                 </li>
@@ -67,5 +69,20 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
       </div>  
     </div>
 </header>
-<?php include 'cartoff.php' ?>
+<?php include '../cart/cartoff.php' ?>
 
+<style>
+  .nav-icon.cart {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-icon.cart .badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 50%;
+}
+</style>

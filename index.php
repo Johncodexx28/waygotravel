@@ -1,5 +1,12 @@
-<?php include 'views/includes/cartoff.php';
+<?php 
+
 session_start();
+include 'cart/cartoff.php';
+
+
+
+include "assets/components/sweetalert.php";
+
 ?>
 
 
@@ -34,6 +41,23 @@ session_start();
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
 
+  <style>
+    
+  .nav-icon.cart {
+  position: relative;
+  display: inline-block;
+}
+
+.nav-icon.cart .badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 50%;
+}
+
+  </style>
   
 
 </head>
@@ -67,6 +91,7 @@ session_start();
       <div class="nav-icons-container d-flex align-items-end">
         <a class="nav-icon cart" href="#" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
           <i class="bi bi-cart"></i>
+          <span class="badge bg-primary" id="cart-badge">0</span>
         </a>
         <div class="user-prof-drop">
             <a class="nav-icon user dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -86,9 +111,9 @@ session_start();
                 </li>
                 <li><hr class="dropdown-divider"></li>
                 <li>
-                  <a class="dropdown-item" href="../views/includes/logout.php">
+                  <a class="dropdown-item" href="../WayGo-Travel-Website/views/includes/logout.php">
                     <i class="bi bi-box-arrow-right me-2"></i> Logout
-                  </a>
+                  </a>  
                 </li>
               <?php else: ?>
                 <li>
@@ -105,12 +130,11 @@ session_start();
             </ul>
         </div>        
       </div>
-
-   
-      
-     
     </div>
   </header>
+
+
+  
   <main class="main">
 
   <?php include 'modal/logmodal.php' ?>

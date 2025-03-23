@@ -137,7 +137,7 @@ session_start();
                 
                 <p class="mb-3">Login Here</p>
                 
-                <form action="../admin/adminauth.php" method="POST">
+                <form action="../admin/adminprocess.php" method="POST">
                     <div class="mb-3">
                         <input type="text" id="accname" name="accname" class="form-control" placeholder="admin" required>
                     </div>

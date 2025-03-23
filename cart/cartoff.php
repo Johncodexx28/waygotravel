@@ -1,4 +1,14 @@
- <!-- Offcanvas Cart Menu -->
+<?php 
+
+
+
+
+
+
+?>
+
+
+
  <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
         <div class="offcanvas-header d-flex justify-content-between align-items-center">
             <p class="offcanvas-title text-center flex-grow-1 fw-bold" id="cartOffcanvasLabel" style="font-size: 20px;">

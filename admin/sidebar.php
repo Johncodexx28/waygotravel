@@ -1,7 +1,7 @@
 <div class="sidebar">
             <!-- Logo -->
             <div class="logo-container">
-                <img src="img/logo.png" alt="WayGo Logo" class="logo">
+                <!-- <img src="img/logo.png" alt="WayGo Logo" class="logo"> -->
                 <h4 class="m-0">WayGo</h4>
             </div>
 

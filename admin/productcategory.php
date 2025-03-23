@@ -2,29 +2,30 @@
     include '../views/includes/conn.php';
     session_start();
 
-
-
-     
     if (!isset($_SESSION['account_name'])) {
         header("Location: ../admin/login.php"); 
         exit(); 
     }
 
+    // Fetch all categories and store them in an array
+    $getcategories = mysqli_query($conn, "SELECT c.category_id, c.category_name, c.created_at, c.icon, 
+                                      COUNT(p.product_id) AS product_count 
+                                      FROM categories c 
+                                      LEFT JOIN products p ON c.category_id = p.category_id 
+                                      GROUP BY c.category_id, c.category_name, c.created_at, c.icon;");
 
-    $getcategories = mysqli_query($conn, "SELECT * FROM categories");
 
-    if (mysqli_num_rows($getcategories) > 0) {
-        while ($row = mysqli_fetch_object($getcategories)) {
-            $category_id = $row->category_id;
-            $category_name = $row->category_name;
+    $categories = []; // Initialize an empty array to store categories
+
+    if ($getcategories && mysqli_num_rows($getcategories) > 0) {
+        while ($row = mysqli_fetch_assoc($getcategories)) {
+            $categories[] = $row; // Store each category as an associative array
         }
     } else {
-        die("Error: Admin not found.");
+        $categories = []; // Set an empty array if no categories are found
     }
-
-    
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -55,14 +56,15 @@
 
                 <!-- Categories Grid View -->
                 <div class="row">
-                    <?php foreach ($getcategories as $category): ?>
+                    <?php foreach ($categories as $category): ?>
                         <div class="col-md-4 col-sm-6 mb-4">
                             <div class="card category-card h-100">
                                 <div class="card-body text-center">
                                     <div class="mb-3">
-                                        <i class="bi bi-tag fs-1 text-primary"></i>
+                                        <i class="<?php echo htmlspecialchars(!empty($category['icon']) ? $category['icon'] : 'bi bi-folder-fill'); ?> fs-1 text-primary"></i>
                                     </div>
                                     <h5 class="card-title"><?php echo htmlspecialchars($category['category_name']); ?></h5>
+                                    <p class="fw-bold"><?php echo htmlspecialchars($category['product_count']); ?></p>
                                 </div>
                                 <div class="card-footer bg-transparent border-top-0">
                                     <div class="d-flex justify-content-around">
@@ -98,24 +100,21 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Category Name</th>
-                                <th scope="col">Products</th>
+                                <th scope="col">Products Count</th>
                                 <th scope="col">Created Date</th>
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php
-                            // This would be replaced with actual database query
-                            foreach ($getcategories as $index => $category) {
-                                echo '
+                            <?php foreach ($categories as $index => $category): ?>
                                 <tr>
-                                    <th scope="row">' . ($index + 1) . '</th>
+                                    <th scope="row"><?php echo $index + 1; ?></th>
                                     <td>
-                                        <i class="bi ' . $category['icon'] . ' text-primary me-2"></i>
-                                        ' . $category['category_name'] . '
+                                    <i class="<?php echo htmlspecialchars(!empty($category['icon']) ? $category['icon'] : 'bi bi-folder-fill'); ?> fs-6 text-primary"></i>
+                                         <?php echo htmlspecialchars($category['category_name']); ?>
                                     </td>
-                                    <td>' . $category['products'] . '</td>
-                                    <td>Mar 10, 2025</td>
+                                    <td><?php echo htmlspecialchars($category['product_count']); ?></td>
+                                    <td><?php echo date("F j, Y g:i A", strtotime($category['created_at'])); ?></td>
                                     <td>
                                         <a href="#" class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#editCategoryModal">
                                             <i class="bi bi-pencil"></i>
@@ -124,110 +123,44 @@
                                             <i class="bi bi-trash"></i>
                                         </a>
                                     </td>
-                                </tr>';
-                            }
-                            ?>
+                                </tr>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
+                    <!-- Add Category Modal -->
+                    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addCategoryLabel">Add Category</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="../admin/adminprocess.php" method="POST">
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="category_name" class="form-label">Category Name</label>
+                                            <input type="text" class="form-control" id="category_name" name="category_name" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="category_icon" class="form-label">Category Icon (Optional)</label>
+                                            <input type="text" class="form-control" id="category_icon" name="category_icon">
+                                            <small class="text-muted">Use Bootstrap Icons class names (e.g., bi bi-tag).</small>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary" name="add_category" id="add_category">Add Category</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Add Category Modal -->
-    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addCategoryModalLabel">Add New Category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="categoryName" class="form-label">Category Name</label>
-                            <input type="text" class="form-control" id="categoryName" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="categoryIcon" class="form-label">Icon</label>
-                            <select class="form-select" id="categoryIcon">
-                                <option value="bi-laptop">Electronics</option>
-                                <option value="bi-basket">Clothing</option>
-                                <option value="bi-house">Home & Garden</option>
-                                <option value="bi-bicycle">Sports</option>
-                                <option value="bi-book">Books</option>
-                                <option value="bi-puzzle">Toys</option>
-                                <option value="bi-gem">Jewelry</option>
-                                <option value="bi-cup-hot">Food & Beverages</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                        <label for="category_icon" class="form-label">Select Icon</label>
-                            <select class="form-select" id="category_icon" name="category_icon" onchange="updateIconPreview()">
-                                <option value="bi-tag">Tag</option>
-                                <option value="bi-cart">Cart</option>
-                                <option value="bi-basket">Basket</option>
-                                <option value="bi-box">Box</option>
-                                <option value="bi-bag">Bag</option>
-                                <option value="bi-shop">Shop</option>
-                            </select>
-                         </div>
-                        <div class="mb-3">
-                            <label for="categoryDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Save Category</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Edit Category Modal -->
-    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="editCategoryName" class="form-label">Category Name</label>
-                            <input type="text" class="form-control" id="editCategoryName" value="Electronics" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editCategoryIcon" class="form-label">Icon</label>
-                            <select class="form-select" id="editCategoryIcon">
-                                <option value="bi-laptop" selected>Electronics</option>
-                                <option value="bi-basket">Clothing</option>
-                                <option value="bi-house">Home & Garden</option>
-                                <option value="bi-bicycle">Sports</option>
-                                <option value="bi-book">Books</option>
-                                <option value="bi-puzzle">Toys</option>
-                                <option value="bi-gem">Jewelry</option>
-                                <option value="bi-cup-hot">Food & Beverages</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="editCategoryDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="editCategoryDescription" rows="3">Electronic devices and accessories including smartphones, laptops, and more.</textarea>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary">Update Category</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap 5.3 JS Bundle with Popper -->
+    <!-- Bootstrap JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

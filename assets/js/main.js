@@ -174,3 +174,16 @@
   document.addEventListener('scroll', navmenuScrollspy);
 
 })();
+
+
+
+// Add this to your index.php inside a script tag
+document.addEventListener("DOMContentLoaded", function() {
+    // Check if the URL has the openModal parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('openModal') && urlParams.get('openModal') === 'login') {
+        // Create a new Bootstrap modal instance and show it
+        var loginModal = new bootstrap.Modal(document.getElementById('loginModal'));
+        loginModal.show();
+    }
+});

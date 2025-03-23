@@ -331,6 +331,26 @@ h6 {
   color: #333; 
   transition: color 0.3s ease-in-out;
 }
+
+
+    
+.cart-counter{
+  position: relative;
+  display: inline-block;
+}
+
+.cart-counter-badge{
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 50%;
+}
+
+
+
+
 @media (max-width: 1200px) {
   .header {
     display: flex;
@@ -351,6 +371,9 @@ h6 {
     order: 3; /* Ensure navmenu appears last */
   }
 }
+
+
+
 
 
 /*--------------------------------------------------------------
@@ -1760,4 +1783,5 @@ section,
 /*--------------------------------------------------------------
 # Starter Section Section
 --------------------------------------------------------------*/
+
 
