@@ -1,17 +1,18 @@
 <?php if (isset($_SESSION['message'])): ?>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            Swal.fire({
-                icon: '<?php echo isset($_SESSION['type']) ? $_SESSION['type'] : 'info'; ?>',
-                title: '<?php echo $_SESSION['message']; ?>',
-                showConfirmButton: false,
-                timer: 3000,
-                timerProgressBar: true,
-                customClass: {
-                    popup: 'small-alert' // Custom styling
-                }
-            });
+        Swal.fire({
+            icon: '<?php echo isset($_SESSION['type']) ? $_SESSION['type'] : 'info'; ?>',
+            title: '<?php echo $_SESSION['message']; ?>',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            customClass: {
+                popup: 'small-alert' 
+            }
         });
+        didOpen: () => {
+            document.querySelector('.swal2-popup').style.fontFamily = '"Poppins", sans-serif';
+        }
     </script>
     <style>
         .small-alert {
@@ -21,6 +22,7 @@
             padding-top: 30px;
             padding-bottom: 50px;
             text-align: center;
+            font-family: system-ui;
         }
     </style>
     <?php

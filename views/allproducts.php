@@ -28,6 +28,7 @@
 
     <?php include '../views/includes/navbar.php'; ?>
     <?php include "../assets/components/sweetalert.php";?>
+    
     <main class="main">
       <section>
 
@@ -41,6 +42,7 @@
    
     <?php include '../views/includes/footer.php'; ?>
     
-
+    <?php include '../cart/fetchcart.php'?>
+    <?php include '../cart/cartoff.php' ?>
 </body>
 </html>

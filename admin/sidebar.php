@@ -33,6 +33,11 @@
                         </div>
                     </li>
                     <li class="nav-item">
+                        <a href="../admin/orderspage.php" class="nav-link">
+                            <i class="bi bi-receipt"></i> Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="../admin/sales.php" class="nav-link">
                             <i class="bi bi-receipt"></i> Sales
                         </a>

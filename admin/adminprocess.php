@@ -22,27 +22,20 @@
             // Direct comparison without password verification
             if ($adminlog_password === trim($row['password'])) {
                 $_SESSION['account_name'] = $adminlog_name;
-                ?>
-                <script>
-                    alert("Login Successful");
-                    window.location.href = '../admin/dash.php';  // Redirect to a protected page
-                </script>
-                <?php
+
+                $_SESSION['message'] = "Administrator login successful. ";
+                $_SESSION['type'] = "success";
+                header("Location: ../admin/dash.php");
+                
             } else {
-                ?>
-                <script>
-                    alert("Incorrect password! ");
-                    window.location.href = '../admin/login.php';
-                </script>
-                <?php
+                $_SESSION['message'] = "Login Failed. Please Try Again.";
+                $_SESSION['type'] = "error";
+                header("Location: ../admin/login.php");
             }
         } else {
-            ?>
-            <script>
-                alert("Account name not found! ");
-                window.location.href = '../admin/login.php';
-            </script>
-            <?php
+            $_SESSION['message'] = "Account name not found!";
+            $_SESSION['type'] = "error";
+            header("Location: ../admin/login.php");
         }
         
         $stmt->close();
@@ -56,12 +49,15 @@
         $productName = mysqli_real_escape_string($conn, $_POST['productName']);
         $productCategory = mysqli_real_escape_string($conn, $_POST['productCategory']);
         $productPrice = mysqli_real_escape_string($conn, $_POST['productPrice']);
+        $stock =  mysqli_real_escape_string($conn, $_POST['stock']);
+        $discount =  mysqli_real_escape_string($conn, $_POST['discount']);
         $productDescription = mysqli_real_escape_string($conn, $_POST['productDescription']);
         $imagePath = null;
         
        
         if(!isset($_FILES["productImage"]) || $_FILES["productImage"]["error"] != 0) {
             $_SESSION['message'] = "Please select an image to upload.";
+            $_SESSION['type'] = "info";
             header("Location: ../admin/productslist.php");
             exit;
         }
@@ -85,7 +81,7 @@
         $check = getimagesize($_FILES["productImage"]["tmp_name"]);
         if($check === false) {
             $_SESSION['message'] = "File is not an image.";
-            $_SESSION['type'] = "success";
+            $_SESSION['type'] = "error";
             header("Location: ../admin/productslist.php");
             exit;
         }
@@ -93,7 +89,7 @@
         
         if ($_FILES["productImage"]["size"] > 500000) {
             $_SESSION['message'] = "Sorry, your file is too large.";
-            $_SESSION['type'] = "Danger";
+            $_SESSION['type'] = "error";
             header("Location: ../admin/productslist.php");
             exit;
         }
@@ -101,7 +97,7 @@
       
         if(!in_array($imageFileType, ["jpg", "jpeg", "png", "gif", "webp"])) {
             $_SESSION['message'] = "Sorry, only JPG, JPEG, PNG, GIF & WEBP files are allowed.";
-            $_SESSION['type'] = "Danger";
+            $_SESSION['type'] = "error";
             header("Location: ../admin/productslist.php");
             exit;
         }
@@ -112,8 +108,8 @@
             $imagePath = "assets/img/uploads/" . $unique_filename;
             
           
-            $sql = "INSERT INTO products (name, category_id, price, description, image) 
-                    VALUES ('$productName', '$productCategory', '$productPrice', '$productDescription', '$imagePath')";
+            $sql = "INSERT INTO products (name, category_id, price, description, image, stock, discount) 
+                    VALUES ('$productName', '$productCategory', '$productPrice', '$productDescription', '$imagePath', '$stock', '$discount')";
                     
             if ($conn->query($sql)) {
              
@@ -143,11 +139,15 @@
         $name = mysqli_real_escape_string($conn, $_POST['name']);
         $description = mysqli_real_escape_string($conn, $_POST['description']);
         $price = mysqli_real_escape_string($conn, $_POST['price']);
-    
+        $discount = mysqli_real_escape_string($conn, $_POST['discount']);
+        $stock = mysqli_real_escape_string($conn, $_POST['stock']);
+        
         $query = "UPDATE products SET 
                   name='$name', 
                   description='$description', 
-                  price='$price'";
+                  price='$price',
+                  discount = '$discount',
+                  stock ='$stock'";
     
         // Debug image upload info
         error_log("Image upload info: " . print_r($_FILES, true));
@@ -166,7 +166,7 @@
                 if (!mkdir($target_dir, 0777, true)) {
                     error_log("Failed to create directory: " . $target_dir);
                     $_SESSION['message'] = "Failed to create upload directory.";
-                    $_SESSION['type'] = "Danger";
+                    $_SESSION['type'] = "error";
                     header("Location: ../admin/productslist.php");
                     exit;
                 }
@@ -176,7 +176,7 @@
             if (!is_writable($target_dir)) {
                 error_log("Directory not writable: " . $target_dir);
                 $_SESSION['message'] = "Upload directory is not writable.";
-                $_SESSION['type'] = "Danger";
+                $_SESSION['type'] = "error";
                 header("Location: ../admin/productslist.php");
                 exit;
             }
@@ -192,7 +192,7 @@
             if($check === false) {
                 error_log("File is not an image");
                 $_SESSION['message'] = "File is not an image.";
-                $_SESSION['type'] = "Danger";
+                $_SESSION['type'] = "error";
                 header("Location: ../admin/productslist.php");
                 exit;
             }
@@ -201,7 +201,7 @@
             if ($_FILES["image"]["size"] > 500000) {
                 error_log("File too large: " . $_FILES["image"]["size"]);
                 $_SESSION['message'] = "Sorry, your file is too large.";
-                $_SESSION['type'] = "Danger";
+                $_SESSION['type'] = "errpr";
                 header("Location: ../admin/productslist.php");
                 exit;
             }
@@ -210,7 +210,7 @@
             if(!in_array($imageFileType, ["jpg", "jpeg", "png", "gif", "webp"])) {
                 error_log("Invalid file type: " . $imageFileType);
                 $_SESSION['message'] = "Sorry, only JPG, JPEG, PNG, GIF & WEBP files are allowed.";
-                $_SESSION['type'] = "Danger";
+                $_SESSION['type'] = "error";
                 header("Location: ../admin/productslist.php");
                 exit;
             }
@@ -241,7 +241,7 @@
             } else {
                 error_log("Failed to move uploaded file. Error code: " . $_FILES["image"]["error"]);
                 $_SESSION['message'] = "Sorry, there was an error uploading your file. Error: " . $_FILES["image"]["error"];
-                $_SESSION['type'] = "Danger";
+                $_SESSION['type'] = "error";
                 header("Location: ../admin/productslist.php");
                 exit;
             }
@@ -270,7 +270,7 @@
         } else {
             error_log("Error updating product: " . mysqli_error($conn));
             $_SESSION['message'] = "Error occurred during update: " . mysqli_error($conn);
-            $_SESSION['type'] = "Danger";
+            $_SESSION['type'] = "error";
             header("Location: ../admin/productslist.php");
             exit;
         }
@@ -312,14 +312,14 @@
             } else {
                 error_log("Error deleting product: " . mysqli_error($conn));
                 $_SESSION['message'] = "Error occurred while deleting. " . $conn->error;
-                $_SESSION['type'] = "Danger";
+                $_SESSION['type'] = "error";
                 header("Location: ../admin/productslist.php");
                 exit;
             }
         } else {
             error_log("Product not found in the database.");
             $_SESSION['message'] = "Product not found.";
-            $_SESSION['type'] = "Danger";
+            $_SESSION['type'] = "error";
             header("Location: ../admin/productslist.php");
             exit;
         }
@@ -335,15 +335,117 @@
                 VALUES ('$category_name', '$icon', NOW())";   
     
         if (mysqli_query($conn, $query)) {
-            $_SESSION['success'] = "Category added successfully!";
+            $_SESSION['message'] = "Category added successfully!";
+            $_SESSION['type'] =  "success";
         } else {
-            $_SESSION['error'] = "Error adding category: " . mysqli_error($conn);
+            $_SESSION['message'] = "Error adding category: " . mysqli_error($conn);
+            $_SESSION['type'] = "error";
         }
     
         // Redirect back to the categories page
-        header("Location: ../admin/categories.php");
+        header("Location: ../admin/productcategory.php");
         exit();
     
     }
+
+
+
+    if (isset($_POST['update_category'])) {
+        $category_id = mysqli_real_escape_string($conn, $_POST['category_id']);
+        $category_name = mysqli_real_escape_string($conn, $_POST['category_name']);
+        $category_icon = mysqli_real_escape_string($conn, $_POST['category_icon']);
+        
+        // Validate input
+        if (empty($category_name)) {
+            $_SESSION['error'] = "Category name cannot be empty";
+            header("Location: ../admin/categories.php");
+            exit();
+        }
+        
+        // Update the category in the database
+        $query = "UPDATE categories SET 
+                  category_name = '$category_name',
+                  icon = '$category_icon'
+                  WHERE category_id = '$category_id'";
+        
+        if (mysqli_query($conn, $query)) {
+            $_SESSION['success'] = "Category updated successfully";
+        } else {
+            $_SESSION['error'] = "Failed to update category: " . mysqli_error($conn);
+        }
+        
+        header("Location: ../admin/categories.php");
+        exit();
+    }
+    
+   
+    // Delete Category - Support both GET and POST methods
+    if (isset($_POST['delete_category']) || isset($_GET['delete_category'])) {
+        // Get category ID from either POST or GET
+        if (isset($_POST['category_id'])) {
+            $category_id = mysqli_real_escape_string($conn, $_POST['category_id']);
+        } else if (isset($_GET['delete_category']) && is_numeric($_GET['delete_category'])) {
+            // If delete_category in GET is the actual ID
+            $category_id = mysqli_real_escape_string($conn, $_GET['delete_category']);
+        } else if (isset($_GET['category_id'])) {
+            // If category_id is provided separately in GET
+            $category_id = mysqli_real_escape_string($conn, $_GET['category_id']);
+        } else {
+            $_SESSION['message'] = "Invalid category ID";
+            $_SESSION['type'] = "error";
+            header("Location: ../admin/productcategory.php");
+            exit();
+        }
+        
+        // Check if there are products in this category
+        $check_query = "SELECT COUNT(*) as count FROM products WHERE category_id = '$category_id'";
+        $result = mysqli_query($conn, $check_query);
+        
+        if (!$result) {
+            $_SESSION['message'] = "Database query error: " . mysqli_error($conn);
+            $_SESSION['type'] = "error";
+            header("Location: ../admin/productcategory.php");
+            exit();
+        }
+        
+        $row = mysqli_fetch_assoc($result);
+        
+        if ($row['count'] > 0) {
+            // There are products in this category
+            $_SESSION['message'] = "Cannot delete category with associated products. Please reassign or delete the products first.";
+            $_SESSION['type'] = "error";
+        } else {
+            // No products, safe to delete
+            $query = "DELETE FROM categories WHERE category_id = '$category_id'";
+            
+            if (mysqli_query($conn, $query)) {
+                $_SESSION['message'] = "Category deleted successfully";
+                $_SESSION['type'] = "success";
+            } else {
+                $_SESSION['message'] = "Failed to delete category: " . mysqli_error($conn);
+                $_SESSION['type'] = "error";
+            }
+        }
+        
+        header("Location: ../admin/productcategory.php");
+        exit();
+    }
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
 ?>  

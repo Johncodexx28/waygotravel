@@ -19,17 +19,6 @@
         margin-bottom: 24px;
     }
     
-    .form-row {
-        display: flex;
-        gap: 20px;
-        margin-bottom: 16px;
-    }
-    
-    .form-group {
-        flex: 1;
-        min-width: 0;
-    }
-    
     .form-label {
         font-weight: 500;
         margin-bottom: 8px;
@@ -227,13 +216,13 @@
                     <h6 class="section-title">Basic Information</h6>
                     
                     <!-- Product Name & Category (Side by Side) -->
-                    <div class="form-row">
-                        <div class="form-group">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <label for="productName" class="form-label">Product Name</label>
                             <input type="text" class="form-control" id="productName" name="productName" placeholder="Enter product name" required>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="col-md-6">
                             <label for="productCategory" class="form-label">Category</label>
                             <select class="form-select" id="productCategory" name="productCategory" required>
                                 <option selected disabled>Select category</option>
@@ -251,13 +240,13 @@
                     </div>
                     
                     <!-- Price & Colors (Side by Side) -->
-                    <div class="form-row">
-                        <div class="form-group">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <label for="productPrice" class="form-label">Price</label>
                             <input type="number" class="form-control" id="productPrice" name="productPrice" placeholder="Enter price" step="0.01" min="0" required>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="col-md-6">
                             <label for="colorPicker" class="form-label">Product Colors</label>
                             <div class="color-input-container">
                                 <input type="color" id="colorPicker" class="color-picker" value="#ff0000">
@@ -268,12 +257,32 @@
                     </div>
                     
                     <!-- Color list -->
-                    <div class="form-group">
-                        <div id="colorList" class="color-list">
-                            <p class="empty-message" id="emptyMessage">No colors added yet</p>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div id="colorList" class="color-list">
+                                <p class="empty-message" id="emptyMessage">No colors added yet</p>
+                            </div>
+                            <div class="hidden-inputs" id="colorInputsContainer">
+                                <!-- Dynamic color inputs will be added here -->
+                            </div>
                         </div>
-                        <div class="hidden-inputs" id="colorInputsContainer">
-                            <!-- Dynamic color inputs will be added here -->
+                    </div>
+
+                    <!-- Discount and Stock (Side by Side) -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="discount" class="form-label fw-semibold">Discount (%)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="discount" name="discount" 
+                                    value="0" 
+                                    min="0" max="100">
+                                <span class="input-group-text bg-light">%</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="stock" class="form-label fw-semibold">Stock Quantity</label>
+                            <input type="number" class="form-control" id="stock" name="stock" value="0" min="0" required>
                         </div>
                     </div>
                     
@@ -281,36 +290,38 @@
                     <h6 class="section-title">Physical Specifications</h6>
                     
                     <!-- Dimensions -->
-                    <div class="form-group">
-                        <label class="form-label">Dimensions</label>
-                        <div class="dimensions-container">
-                            <div class="dimension-input">
-                                <input type="text" class="form-control" id="dimensionLength" name="dimensionLength" placeholder="Length" >
-                            </div>
-                            <div class="dimension-separator">×</div>
-                            <div class="dimension-input">
-                                <input type="text" class="form-control" id="dimensionWidth" name="dimensionWidth" placeholder="Width" >
-                            </div>
-                            <div class="dimension-separator">×</div>
-                            <div class="dimension-input">
-                                <input type="text" class="form-control" id="dimensionHeight" name="dimensionHeight" placeholder="Height" >
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label class="form-label">Dimensions</label>
+                            <div class="dimensions-container">
+                                <div class="dimension-input">
+                                    <input type="text" class="form-control" id="dimensionLength" name="dimensionLength" placeholder="Length" >
+                                </div>
+                                <div class="dimension-separator">×</div>
+                                <div class="dimension-input">
+                                    <input type="text" class="form-control" id="dimensionWidth" name="dimensionWidth" placeholder="Width" >
+                                </div>
+                                <div class="dimension-separator">×</div>
+                                <div class="dimension-input">
+                                    <input type="text" class="form-control" id="dimensionHeight" name="dimensionHeight" placeholder="Height" >
+                                </div>
                             </div>
                         </div>
                     </div>
                     
                     <!-- Weight & Materials & Capacity (Side by Side) -->
-                    <div class="form-row">
-                        <div class="form-group">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
                             <label for="productWeight" class="form-label">Weight</label>
                             <input type="text" class="form-control" id="productWeight" name="productWeight" placeholder="e.g., 2.1 lbs (0.95 kg)" >
                         </div>
                         
-                        <div class="form-group">
+                        <div class="col-md-4">
                             <label for="productMaterials" class="form-label">Materials</label>
                             <input type="text" class="form-control" id="productMaterials" name="productMaterials" placeholder="e.g., Nylon, polyester lining" >
                         </div>
                         
-                        <div class="form-group">
+                        <div class="col-md-4">
                             <label for="productCapacity" class="form-label">Capacity</label>
                             <input type="text" class="form-control" id="productCapacity" name="productCapacity" placeholder="e.g., 24L" >
                         </div>
@@ -320,13 +331,13 @@
                     <h6 class="section-title">Description & Media</h6>
                     
                     <!-- Description & Image Upload -->
-                    <div class="form-row">
-                        <div class="form-group">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
                             <label for="productDescription" class="form-label">Description</label>
                             <textarea class="form-control" id="productDescription" maxlength="700" name="productDescription" rows="5" placeholder="Enter product description" style="resize: none;"></textarea>
                         </div>
                         
-                        <div class="form-group">
+                        <div class="col-md-6">
                             <label for="productImage" class="form-label">Upload Image</label>
                             <div class="file-upload">
                                 <input type="file" class="form-control" id="productImage" name="productImage" accept="image/*">
@@ -451,4 +462,4 @@
             });
         }
     });
-</script>
+</script>   

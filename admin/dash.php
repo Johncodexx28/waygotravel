@@ -1,7 +1,7 @@
 <?php
-    include '../views/includes/conn.php';
     session_start();
-
+    include '../views/includes/conn.php';
+    
 
 
      
@@ -26,11 +26,14 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="../admin/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="d-flex">
         <!-- Sidebar -->
         <?php include 'sidebar.php' ?>
+        <?php include "../assets/components/sweetalert.php"; ?>
 
         <!-- Main Content -->
         <div class="content">

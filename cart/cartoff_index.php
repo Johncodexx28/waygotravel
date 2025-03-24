@@ -1,5 +1,5 @@
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+<div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas_index" aria-labelledby="cartOffcanvasLabel">
     <div class="offcanvas-header d-flex justify-content-between align-items-center border-bottom pb-3">
         <p class="offcanvas-title text-center flex-grow-1 fw-bold" id="cartOffcanvasLabel" style="font-size: 20px;">
             Shopping Cart
@@ -12,7 +12,7 @@
                 <?php foreach ($cart_items as $item) : ?>
                     <div class="cart-item mb-4 border-bottom pb-3">
                         <div class="d-flex align-items-center">
-                            <img src="../<?php echo htmlspecialchars($item['image']); ?>" 
+                            <img src="/WayGo-Travel-Website/<?php echo htmlspecialchars($item['image']); ?>" 
                                 alt="<?php echo htmlspecialchars($item['product_name']); ?>" 
                                 class="rounded me-3" 
                                 style="width: 70px; height: 70px; object-fit: cover;">
@@ -34,7 +34,7 @@
                                            class="btn btn-sm px-2 py-0 border-0" style="font-size: 14px;">+</a>
                                     </div>
                                     
-                                    <a href="../cart/removecart.php?cart_id=<?php echo $item['cart_id']; ?>" 
+                                    <a href="removecart.php?cart_id=<?php echo $item['cart_id']; ?>" 
                                        class="text-danger" 
                                        onclick="return confirm('Remove item from cart?')">
                                         <i class="bi bi-trash"></i>
@@ -66,7 +66,7 @@
                 <div class="text-center py-5">
                     <i class="bi bi-cart" style="font-size: 3rem;"></i>
                     <p id="empty-cart-text" class="text-muted mt-3">Your cart is empty.</p>
-                    <a href="../views/allproducts.php" class="btn btn-outline-dark mt-3">
+                    <a href="/WayGo-Travel-Website/views/newrelease.php" class="btn btn-outline-dark mt-3">
                         Start Shopping
                     </a>
                 </div>

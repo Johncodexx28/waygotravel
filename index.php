@@ -1,13 +1,54 @@
-<?php 
+<?php
+session_start(); 
+include '../WayGo-Travel-Website/views/includes/conn.php';
 
-session_start();
-include 'cart/cartoff.php';
+$cart_items = [];
+$total_price = 0;
+
+// Check if the user is logged in
+if (isset($_SESSION['user_id'])) {
+    $user_id = $_SESSION['user_id'];
+
+    $sql = "SELECT c.cart_id, c.product_id, c.quantity, c.color, c.price, c.size,
+                p.name AS product_name, p.image 
+         FROM cart c
+         JOIN products p ON c.product_id = p.product_id 
+         WHERE c.user_id = ? AND c.status = 'Incart'";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    while ($row = $result->fetch_assoc()) {
+        $cart_items[] = $row;
+        $total_price += ($row['price'] * $row['quantity']);
+    }
+
+    $stmt->close();
+}
 
 
 
-include "assets/components/sweetalert.php";
+  $count = 0;
+
+  if (isset($_SESSION['user_id'])) {
+      $sql = "SELECT COUNT(*) as count FROM cart WHERE user_id = ? ";
+      $stmt = $conn->prepare($sql);
+      $stmt->bind_param("i", $_SESSION['user_id']);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      
+      if ($row = $result->fetch_assoc()) {
+          $count = $row['count'];
+      }
+      
+      $stmt->close();
+  }
+
 
 ?>
+
 
 
 
@@ -38,6 +79,9 @@ include "assets/components/sweetalert.php";
   <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
   <!-- Main CSS File -->
   <link href="assets/css/main.css" rel="stylesheet">
 
@@ -64,6 +108,9 @@ include "assets/components/sweetalert.php";
 
 <body class="index-page">
 
+  <?php include '../WayGo-Travel-Website/assets/components/sweetalert.php';?>
+  <?php include '../WayGo-Travel-Website/cart/cartoff_index.php' ?>
+
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container position-relative d-flex align-items-center justify-content-between">
 
@@ -89,9 +136,9 @@ include "assets/components/sweetalert.php";
 
     
       <div class="nav-icons-container d-flex align-items-end">
-        <a class="nav-icon cart" href="#" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+        <a class="nav-icon cart" href="#" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas_index">
           <i class="bi bi-cart"></i>
-          <span class="badge bg-primary" id="cart-badge">0</span>
+          <span class="badge bg-primary" id="cart-badge"><?php echo $count ?></span>
         </a>
         <div class="user-prof-drop">
             <a class="nav-icon user dropdown-toggle" href="#" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
@@ -100,7 +147,7 @@ include "assets/components/sweetalert.php";
             <ul class="dropdown-menu" aria-labelledby="userDropdown">
               <?php if(isset($_SESSION['user_id'])): ?>
                 <li>
-                  <a class="dropdown-item" href="profile.php">
+                  <a class="dropdown-item" href="../WayGo-Travel-Website/views/userprofile.php">
                     <i class="bi bi-person me-2"></i> My Profile
                   </a>
                 </li>

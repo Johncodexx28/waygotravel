@@ -2,8 +2,7 @@
 session_start();
 session_unset();
 session_destroy();
-echo "<script>
-        alert('You have successfully logged out.');
-        window.location.href='../admin/login.php';
-      </script>";
+$_SESSION['message'] = "You have successfully logged out";
+$_SESSION['type'] = "success";
+header("Location: ../admin/login.php");
 exit();

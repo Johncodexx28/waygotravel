@@ -1,6 +1,6 @@
 <?php 
-   $pageTitle = "New Release - WayGo Travel";
    session_start();
+   $pageTitle = "New Release - WayGo Travel";
    include '../views/includes/conn.php';
    include '../cart/getcartcount.php';
  
@@ -8,8 +8,9 @@
    
 
 
-   $get_products = "SELECT * FROM products"; 
+   $get_products = "SELECT * FROM products WHERE created_at >= NOW() - INTERVAL 7 DAY ORDER BY created_at DESC  LIMIT 8";
    $result = $conn->query($get_products);
+   
 
 
    
@@ -19,6 +20,8 @@
    <?php include "../views/includes/head.php"; ?>
    <body>
       <?php include '../views/includes/navbar.php'; ?>
+      <?php include "../assets/components/sweetalert.php";?>
+     
       <main class="main">
          <?php include '../modal/logmodal.php' ?>
          <?php include '../modal/signmodal.php' ?>  
@@ -194,8 +197,8 @@
                         <div class="col">
                               <a href="../views/productdetails.php?id=<?php echo $row['product_id']; ?>" class="text-decoration-none">
                                  <div class="product-card position-relative">
-                                          <div class="sale-badge">10% off</div>
-                                          <div class="stock-badge">3 in stock</div>
+                                          <div class="sale-badge"><?php echo htmlspecialchars($row['discount']);?>% off</div>
+                                          <div class="stock-badge"><?php echo htmlspecialchars($row['stock']); ?></div>
                                     <div class="text-center p-3 ">
                                           <img src="../<?php echo htmlspecialchars($row['image']); ?>" 
                                              alt="<?php echo htmlspecialchars($row['name']); ?>" 
@@ -248,5 +251,7 @@
          </div>
       </main>
       <?php include '../views/includes/footer.php'; ?>
+      <?php include '../cart/fetchcart.php'?>
+      <?php include '../cart/cartoff.php' ?>
    </body>
 </html>

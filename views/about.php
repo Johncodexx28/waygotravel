@@ -1,6 +1,11 @@
 <?php 
-  $pageTitle = "About - WayGo Travel";
-  session_start();
+    session_start();
+    $pageTitle = "About - WayGo Travel";
+ 
+
+    include '../views/includes/conn.php';
+    include '../cart/getcartcount.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -9,7 +14,7 @@
 <body>
 
   <?php include '../views/includes/navbar.php'; ?>
-  
+  <?php include "../assets/components/sweetalert.php"; ?>
   
   <main class="main">
 
@@ -96,6 +101,8 @@
 
 
 
-  <?php include '../views/includes/footer.php'; ?>
+    <?php include '../views/includes/footer.php'; ?>
+    <?php include '../cart/fetchcart.php'?>
+    <?php include '../cart/cartoff.php' ?>
 </body>
 </html>

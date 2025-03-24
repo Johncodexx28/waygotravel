@@ -69,7 +69,7 @@ $current_page = basename($_SERVER['PHP_SELF']); // Get current file name
       </div>  
     </div>
 </header>
-<?php include '../cart/cartoff.php' ?>
+
 
 <style>
   .nav-icon.cart {

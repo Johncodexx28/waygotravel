@@ -177,7 +177,7 @@
 
 
 
-// Add this to your index.php inside a script tag
+
 document.addEventListener("DOMContentLoaded", function() {
     // Check if the URL has the openModal parameter
     const urlParams = new URLSearchParams(window.location.search);

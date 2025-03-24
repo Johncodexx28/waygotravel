@@ -82,6 +82,8 @@ if(isset($_SESSION['error'])) unset($_SESSION['error']);
 <?php include "../views/includes/head.php"; ?>
 <body class="d-flex flex-column min-vh-100">
     <?php include '../views/includes/navbar.php'; ?>
+    <?php include "../assets/components/sweetalert.php"; ?>
+    
     <main class="main flex-grow-1">
         <?php include '../modal/logmodal.php' ?>
         <?php include '../modal/signmodal.php' ?>  
@@ -284,6 +286,8 @@ if(isset($_SESSION['error'])) unset($_SESSION['error']);
     </main>
     
     <?php include '../views/includes/footer.php'; ?>
+    <?php include '../cart/fetchcart.php'?>
+    <?php include '../cart/cartoff.php' ?>
     
     <!-- JavaScript for Image Switching and Quantity Controls -->
     <script>

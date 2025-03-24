@@ -12,6 +12,9 @@ session_start();
     <!-- Bootstrap 5.3 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+     <!-- Sweet-alert -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     <style>
         body {
@@ -121,6 +124,8 @@ session_start();
         <!-- Left side with background image -->
         <div class="image-side">
         </div>
+        
+        <?php include "../assets/components/sweetalert.php"; ?>
         
         <!-- Right side with login form -->
         <div class="login-side">

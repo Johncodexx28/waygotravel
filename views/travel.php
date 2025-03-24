@@ -1,12 +1,33 @@
 <?php 
-   $pageTitle = "Travel - WayGo Travel";
    session_start();
+   $pageTitle = "Travel - WayGo Travel";
+ 
+
+   include '../views/includes/conn.php';
+   include '../cart/getcartcount.php';
+
+
+   
+   $get_products = "SELECT products.*, categories.category_name 
+   FROM products 
+   INNER JOIN categories ON products.category_id = categories.category_id
+   WHERE categories.category_name = 'Travel'
+   ORDER BY products.created_at DESC
+   LIMIT 8";
+
+   $result = $conn->query($get_products);
+
+
+
+
    ?>
 <!DOCTYPE html>
 <html lang="en">
    <?php include "../views/includes/head.php"; ?>
    <body>
       <?php include '../views/includes/navbar.php'; ?>
+      <?php include "../assets/components/sweetalert.php"; ?>
+      
       <main class="main">
          <?php include '../modal/logmodal.php' ?>
          <?php include '../modal/signmodal.php' ?>  
@@ -175,166 +196,42 @@
                         </ul>
                      </div>
                   </div>
-                  <!-- Products Grid - First Row -->
-                  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mb-4">
-                     <!-- Product 1 -->
-                     <div class="col">
-                        <div class="product-card position-relative">
-                           <div class="sale-badge">10% off</div>
-                           <div class="text-center p-3">
-                              <img src="../assets/img/bags/bag1.webp" alt="Herschel Backpack Black" class="img-fluid">
-                           </div>
-                           <div class="color-options text-center mb-2">
-                              <span class="color-option" style="background-color: #8B4513;"></span>
-                              <span class="color-option" style="background-color: #000000;"></span>
-                              <span class="color-option" style="background-color: #333333;"></span>
-                              <span class="color-option" style="background-color: #696969;"></span>
-                           </div>
-                           <div class="p-3">
-                              <h5 class="product-title">Herschel Little America™ Backpack | Premium Classics - 30L</h5>
-                              <div class="d-flex">
-                                 <div class="product-price">₱10,791.00</div>
-                                 <div class="sale-price">Sale</div>
-                              </div>
-                           </div>
+                
+                  
+
+                  <div class="row row-cols-1 row-cols-md-4 row-cols-lg- g-4 mb-4">
+                     <?php while ($row = $result->fetch_assoc()) { ?>
+                        <div class="col">
+                              <a href="../views/productdetails.php?id=<?php echo $row['product_id']; ?>" class="text-decoration-none">
+                                 <div class="product-card position-relative">
+                                          <div class="sale-badge"><?php echo htmlspecialchars($row['discount']);?>% off</div>
+                                          <div class="stock-badge"><?php echo htmlspecialchars($row['stock']); ?></div>
+                                    <div class="text-center p-3 ">
+                                          <img src="../<?php echo htmlspecialchars($row['image']); ?>" 
+                                             alt="<?php echo htmlspecialchars($row['name']); ?>" 
+                                             class="img-fluid">
+                                    </div>
+                                    <div class="color-options text-center mb-2">
+                                       <span class="color-option" style="background-color: #8B4513;"></span>
+                                       <span class="color-option" style="background-color: #000000;"></span>
+                                       <span class="color-option" style="background-color: #333333;"></span>
+                                       <span class="color-option" style="background-color: #696969;"></span>
+                                    </div>
+                                    <div class="p-3">
+                                          <h3 class="product-title"><?php echo htmlspecialchars($row['name']); ?></h3>
+                                          <div class="d-flex">
+                                             <div class="product-price">₱<?php echo number_format($row['price'], 2); ?></div>
+                                             <?php if (!empty($row['sale_price'])) { ?>
+                                                <div class="sale-price">₱<?php echo number_format($row['sale_price'], 2); ?></div>
+                                             <?php } ?>
+                                          </div>
+                                    </div>
+                                 </div>
+                              </a>
                         </div>
-                     </div>
-                     <!-- Product 2 -->
-                     <div class="col">
-                        <div class="product-card position-relative">
-                           <div class="sale-badge">10% off</div>
-                           <div class="stock-badge">3 in stock</div>
-                           <div class="text-center p-3">
-                              <img src="../assets/img/bags/bag2.webp"alt="Herschel Backpack Black Tan" class="img-fluid">
-                           </div>
-                           <div class="color-options text-center mb-2">
-                              <span class="color-option" style="background-color: #000080;"></span>
-                              <span class="color-option" style="background-color: #ADD8E6;"></span>
-                              <span class="color-option" style="background-color: #191970;"></span>
-                              <span class="color-option" style="background-color: #8B4513;"></span>
-                           </div>
-                           <div class="p-3">
-                              <h5 class="product-title">Herschel Little America™ Backpack | Mid-Volume - 20L</h5>
-                              <div class="d-flex">
-                                 <div class="product-price">₱7,191.00</div>
-                                 <div class="sale-price">Sale</div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <!-- Product 3 -->
-                     <div class="col">
-                        <div class="product-card position-relative">
-                           <div class="sale-badge">10% off</div>
-                           <div class="text-center p-3">
-                              <img src="../assets/img/bags/bag3.webp" alt="Herschel Backpack Gray" class="img-fluid">
-                           </div>
-                           <div class="color-options text-center mb-2">
-                              <span class="color-option" style="background-color: #000000;"></span>
-                              <span class="color-option" style="background-color: #696969;"></span>
-                              <span class="color-option" style="background-color: #333333;"></span>
-                              <span class="color-option" style="background-color: #4B0082;"></span>
-                           </div>
-                           <div class="p-3">
-                              <h5 class="product-title">Herschel Little America™ Backpack - 30L</h5>
-                              <div class="d-flex">
-                                 <div class="product-price">₱7,641.00</div>
-                                 <div class="sale-price">Sale</div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <!-- Product 4 -->
-                     <div class="col">
-                        <div class="product-card position-relative">
-                           <div class="sale-badge">10% off</div>
-                           <div class="text-center p-3">
-                              <img src="../assets/img/bags/bag4.webp"alt="Herschel Backpack Pink" class="img-fluid">
-                           </div>
-                           <div class="color-options text-center mb-2">
-                              <span class="color-option" style="background-color: #8B4513;"></span>
-                              <span class="color-option" style="background-color: #FF1493;"></span>
-                              <span class="color-option" style="background-color: #000000;"></span>
-                              <span class="color-option" style="background-color: #D3D3D3;"></span>
-                           </div>
-                           <div class="p-3">
-                              <h5 class="product-title">Herschel Little America™ Backpack - 30L</h5>
-                              <div class="d-flex">
-                                 <div class="product-price">₱7,641.00</div>
-                                 <div class="sale-price">Sale</div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
+                     <?php } ?>
                   </div>
-                  <!-- Products Grid - Second Row -->
-                  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-                     <!-- Product 5 -->
-                     <div class="col">
-                        <div class="product-card position-relative">
-                           <div class="sale-badge">10% off</div>
-                           <div class="text-center p-3">
-                              <img src="../assets/img/bags/bag5.webp" alt="Herschel Backpack Black" class="img-fluid">
-                           </div>
-                           <div class="p-3">
-                              <h5 class="product-title">Herschel Backpack - Slim Profile</h5>
-                              <div class="d-flex">
-                                 <div class="product-price">₱6,541.00</div>
-                                 <div class="sale-price">Sale</div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <!-- Product 6 -->
-                     <div class="col">
-                        <div class="product-card position-relative">
-                           <div class="sale-badge">10% off</div>
-                           <div class="stock-badge">1 in stock</div>
-                           <div class="text-center p-3">
-                              <img src="../assets/img/bags/bag6.webp" alt="Herschel Backpack Black Leather" class="img-fluid">
-                           </div>
-                           <div class="p-3">
-                              <h5 class="product-title">Herschel Premium Leather Backpack</h5>
-                              <div class="d-flex">
-                                 <div class="product-price">₱12,991.00</div>
-                                 <div class="sale-price">Sale</div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <!-- Product 7 -->
-                     <div class="col">
-                        <div class="product-card position-relative">
-                           <div class="sale-badge">10% off</div>
-                           <div class="text-center p-3">
-                              <img src="../assets/img/bags/bag1.webp" alt="Herschel Urban Backpack" class="img-fluid">
-                           </div>
-                           <div class="p-3">
-                              <h5 class="product-title">Herschel Urban Commuter Backpack</h5>
-                              <div class="d-flex">
-                                 <div class="product-price">₱8,541.00</div>
-                                 <div class="sale-price">Sale</div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <!-- Product 8 -->
-                     <div class="col">
-                        <div class="product-card position-relative">
-                           <div class="sale-badge">10% off</div>
-                           <div class="text-center p-3">
-                              <img src="../assets/img/bags/bag2.webp" alt="Herschel Backpack Pink" class="img-fluid">
-                           </div>
-                           <div class="p-3">
-                              <h5 class="product-title">Herschel Travel Daypack - Compact</h5>
-                              <div class="d-flex">
-                                 <div class="product-price">₱5,641.00</div>
-                                 <div class="sale-price">Sale</div>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                  </div>
+                  
                   <!-- Pagination -->
                   <div class="d-flex justify-content-center mt-5">
                      <nav aria-label="Product pagination">
@@ -360,5 +257,7 @@
          </div>
       </main>
       <?php include '../views/includes/footer.php'; ?>
+      <?php include '../cart/fetchcart.php'?>
+      <?php include '../cart/cartoff.php' ?>
    </body>
 </html>
